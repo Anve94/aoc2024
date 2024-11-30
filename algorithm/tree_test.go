@@ -1,11 +1,11 @@
-package binarytree
+package algorithm
 
 import (
 	"testing"
 )
 
 func TestInsert(t *testing.T) {
-	tree := &Tree{}
+	tree := &BinaryTree{}
 
 	// Test initial state of the tree
 	// Expected tree:

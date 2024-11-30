@@ -1,25 +1,25 @@
-package binarytree
+package algorithm
 
-type Tree struct {
-	Root *Node
+type BinaryTree struct {
+	Root *TreeNode
 }
 
-func (t *Tree) Insert(number int) {
+func (t *BinaryTree) Insert(number int) {
 	if t.Root == nil {
 		// No root yet so we create one
-		t.Root = &Node{number, nil, nil}
+		t.Root = &TreeNode{number, nil, nil}
 	} else {
 		// There is a root so we insert on the node
 		t.Root.insert(number)
 	}
 }
 
-func (n *Node) insert(number int) {
+func (n *TreeNode) insert(number int) {
 	// Lower numbers compared to current node go left, higher or equal go right
 	if number < n.Data {
 		if n.Left == nil {
 			// No left node so we insert a left node
-			n.Left = &Node{number, nil, nil}
+			n.Left = &TreeNode{number, nil, nil}
 		} else {
 			// Continue looking down from the already existing left node
 			n.Left.insert(number)
@@ -27,7 +27,7 @@ func (n *Node) insert(number int) {
 	} else {
 		if n.Right == nil {
 			// No node yet so insert to the right here
-			n.Right = &Node{number, nil, nil}
+			n.Right = &TreeNode{number, nil, nil}
 		} else {
 			// Continue looking down from right node
 			n.Right.insert(number)
