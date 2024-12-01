@@ -1,7 +1,7 @@
 package main
 
 import (
-	"anve/algorithm"
+	algo "anve/algorithm"
 	"fmt"
 	"helper/parser"
 	"log"
@@ -56,7 +56,7 @@ func part2(input []string) int {
 
 	for i := 0; i < len(left); i++ {
 		num := left[i]
-		count := algorithm.Count(right, func(x int) bool {
+		count := algo.Count(right, func(x int) bool {
 			return x == num
 		})
 		total += count * num
