@@ -19,22 +19,15 @@ func main() {
 		log.Fatal("Could not read from input file")
 	}
 
-	demoResult := part1(demoInput)
-	fmt.Println("Demo result:", demoResult)
-
 	fullInput, err := tfp.ParseLinesFromPathAsString("input.txt")
 	if err != nil {
 		log.Fatal("Could not read from input file")
 	}
 
-	fullResult := part1(fullInput)
-	fmt.Println("Full result:", fullResult)
-
-	demo2Result := part2(demoInput)
-	fmt.Println("Demo 2 result:", demo2Result)
-
-	full2Result := part2(fullInput)
-	fmt.Println("Full 2 result:", full2Result)
+	fmt.Println("Demo result:", part1(demoInput))
+	fmt.Println("Full result:", part1(fullInput))
+	fmt.Println("Demo 2 result:", part2(demoInput))
+	fmt.Println("Full 2 result:", part2(fullInput))
 }
 
 func part1(input []string) int {
