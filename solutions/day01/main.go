@@ -39,8 +39,6 @@ func main() {
 
 func part1(input []string) int {
 	left, right := getSortedSlices(input)
-	sort.Ints(left)
-	sort.Ints(right)
 	var total int
 
 	for i := 0; i < len(left); i++ {
@@ -54,8 +52,6 @@ func part1(input []string) int {
 
 func part2(input []string) int {
 	left, right := getSortedSlices(input)
-	sort.Ints(left)
-	sort.Ints(right)
 	var total int
 
 	for i := 0; i < len(left); i++ {
@@ -85,6 +81,9 @@ func getSortedSlices(input []string) ([]int, []int) {
 		num, _ = strconv.Atoi(matches[1])
 		right = append(right, num)
 	}
+
+	sort.Ints(left)
+	sort.Ints(right)
 
 	return left, right
 }
