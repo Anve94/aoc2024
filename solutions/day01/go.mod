@@ -1,4 +1,4 @@
-module main
+module day01
 
 replace helper/parser => ../../helper/parser
 
