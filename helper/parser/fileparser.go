@@ -18,7 +18,13 @@ func (tfp TextFileParser) ParseLinesFromPathAsString(path string) ([]string, err
 	if err != nil {
 		return nil, err
 	}
-	defer file.Close()
+
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
 
 	var lines []string
 

@@ -51,19 +51,19 @@ func TestDetermineReportIsSafe(t *testing.T) {
 	var unsafeReportOutOfLimits = []int{1, 2, 7, 8, 10}
 	var unsafeReportChangesAscension = []int{12, 8, 7, 6, 3}
 
-	if !isReportSafe(safeAscendingReport, true, 1, 3) {
+	if !isReportSafe(safeAscendingReport, true, 1, 3, false) {
 		t.Error("Expected report to be safe, but got unsafe, tested ", safeAscendingReport)
 	}
 
-	if !isReportSafe(safeDescendingReport, false, 1, 3) {
+	if !isReportSafe(safeDescendingReport, false, 1, 3, false) {
 		t.Error("Expected report to be safe, but got unsafe, tested ", safeDescendingReport)
 	}
 
-	if isReportSafe(unsafeReportOutOfLimits, true, 1, 3) {
+	if isReportSafe(unsafeReportOutOfLimits, true, 1, 3, false) {
 		t.Error("Expected report to be unsafe, but got safe, tested ", unsafeReportOutOfLimits)
 	}
 
-	if isReportSafe(unsafeReportChangesAscension, false, 1, 3) {
+	if isReportSafe(unsafeReportChangesAscension, false, 1, 3, false) {
 		t.Error("Expected report to be unsafe, but got safe, tested ", unsafeReportChangesAscension)
 	}
 }
@@ -75,5 +75,26 @@ func TestPart1AgainstDemoInput(t *testing.T) {
 	result := part1(input)
 	if result != 2 {
 		t.Error("Expected 2 as result, got ", result)
+	}
+}
+
+func TestReportSafetyWithProblemDampener(t *testing.T) {
+	safeReportWithRemoval := []int{1, 3, 2, 4, 5}
+	if !isReportSafe(safeReportWithRemoval, true, 1, 3, true) {
+		t.Error("Expected report to be safe, but got unsafe, tested ", safeReportWithRemoval)
+	}
+	unsafeReportWithRemoval := []int{1, 2, 7, 8, 9}
+	if isReportSafe(unsafeReportWithRemoval, true, 1, 3, true) {
+		t.Error("Expected report to be unsafe, but got safe, tested ", unsafeReportWithRemoval)
+	}
+}
+
+func TestPart2AgainstDemoInput(t *testing.T) {
+	ftp := parser.TextFileParser{}
+	input, _ := ftp.ParseLinesFromPathAsString("demo.txt")
+
+	result := part2(input)
+	if result != 4 {
+		t.Error("Expected 4 as result, got ", result)
 	}
 }
