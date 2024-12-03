@@ -1,3 +1,4 @@
 .idea
 solutions/*/*.txt
 !solutions/*/demo.txt
+!solutions/*/demo2.txt
