@@ -13,8 +13,8 @@ func main() {
 
 	fmt.Println("Demo result:", part1(demoInput))
 	fmt.Println("Full result:", part1(fullInput))
-	//fmt.Println("Demo 2 result:", part2(part2DemoInput))
-	//fmt.Println("Full 2 result:", part2(fullInput))
+	fmt.Println("Demo 2 result:", part2(demoInput))
+	fmt.Println("Full 2 result:", part2(fullInput))
 
 }
 
@@ -35,8 +35,21 @@ func part1(input []string) int {
 }
 
 func part2(input []string) int {
+	count := 0
+
 	indexes := getStartingIndexes(input)
-	return len(indexes)
+
+	for i := 0; i < len(indexes); i++ {
+		x, y := indexes[i][0], indexes[i][1]
+		diag := fmt.Sprintf("%cA%c", input[x-1][y-1], input[x+1][y+1])
+		opposite := fmt.Sprintf("%cA%c", input[x-1][y+1], input[x+1][y-1])
+
+		if (diag == "SAM" || diag == "MAS") && (opposite == "SAM" || opposite == "MAS") {
+			count++
+		}
+	}
+
+	return count
 }
 
 func getStartingIndexes(input []string) [][]int {
@@ -52,6 +65,7 @@ func getStartingIndexes(input []string) [][]int {
 			}
 		}
 	}
+
 	return indexes
 }
 
