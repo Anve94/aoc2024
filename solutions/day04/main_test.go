@@ -1,7 +1,7 @@
 package main
 
 import (
-	"reflect"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -20,7 +20,7 @@ func TestDiagonalExtraction(t *testing.T) {
 	}
 
 	result := getDiagonals(toTest)
-	if reflect.DeepEqual(result, expected) {
+	if !assert.ElementsMatch(t, result, expected) {
 		t.Error("Expected ", expected, " but got ", result)
 	}
 }
@@ -40,7 +40,8 @@ func TestOppositeDiagonalExtraction(t *testing.T) {
 	}
 
 	result := getOppositeDiagonals(toTest)
-	if reflect.DeepEqual(result, expected) {
+
+	if !assert.ElementsMatch(t, result, expected) {
 		t.Error("Expected ", expected, " but got ", result)
 	}
 }
@@ -53,12 +54,30 @@ func TestVerticalsExtraction(t *testing.T) {
 	}
 	expected := []string{
 		"adg",
-		"bef",
+		"beh",
 		"cfi",
 	}
 
-	result := getOppositeDiagonals(toTest)
-	if reflect.DeepEqual(result, expected) {
+	result := getVertical(toTest)
+	if !assert.ElementsMatch(t, result, expected) {
+		t.Error("Expected ", expected, " but got ", result)
+	}
+}
+
+func TestValidStartingIndexes(t *testing.T) {
+	toTest := []string{
+		"AvAA",
+		"AAfA",
+		"AgAA",
+		"AAAA",
+	}
+	expected := [][]int{
+		{1, 1},
+		{2, 2},
+	}
+
+	result := getStartingIndexes(toTest)
+	if !assert.ElementsMatch(t, result, expected) {
 		t.Error("Expected ", expected, " but got ", result)
 	}
 }

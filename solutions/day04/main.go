@@ -34,6 +34,27 @@ func part1(input []string) int {
 	return count
 }
 
+func part2(input []string) int {
+	indexes := getStartingIndexes(input)
+	return len(indexes)
+}
+
+func getStartingIndexes(input []string) [][]int {
+	var indexes [][]int
+	for x, line := range input {
+		for y, char := range line {
+			if x == 0 || y == 0 || x == len(input)-1 || y == len(input[x])-1 {
+				// Skip boundaries since neighbour checks would result in out of bounds anyway
+				continue
+			}
+			if char == 'A' {
+				indexes = append(indexes, []int{x, y})
+			}
+		}
+	}
+	return indexes
+}
+
 func getDiagonals(lines []string) []string {
 	var diagonals []string
 	n := len(lines)
