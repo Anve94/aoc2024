@@ -14,8 +14,8 @@ func main() {
 
 	fmt.Println("Demo result:", part1(demoInput))
 	fmt.Println("Full result:", part1(fullInput))
-	//fmt.Println("Demo 2 result:", part2(demoInput))
-	//fmt.Println("Full 2 result:", part2(fullInput))
+	fmt.Println("Demo 2 result:", part2(demoInput))
+	fmt.Println("Full 2 result:", part2(fullInput))
 }
 
 func part1(input []string) int {
@@ -24,12 +24,46 @@ func part1(input []string) int {
 	total := 0
 
 	for _, page := range pages {
-		if isValidPage(page, hashMap) {
+		_, isValid := isValidPage(page, hashMap)
+		if isValid {
 			found := getMiddleValue(page)
 			total += found
 		}
 	}
 	return total
+}
+
+func part2(input []string) int {
+	orders, pages := processInputs(input)
+	hashMap := createHashMap(orders)
+	total := 0
+	var incorrectPages []string
+
+	for _, page := range pages {
+		_, isValid := isValidPage(page, hashMap)
+		if !isValid {
+			incorrectPages = append(incorrectPages, page)
+		}
+	}
+
+	for _, incorrectPage := range incorrectPages {
+		validPage := correctPage(incorrectPage, hashMap)
+		total += getMiddleValue(validPage)
+	}
+
+	return total
+}
+
+func correctPage(page string, hashMap map[int][]int) string {
+	values := strings.Split(page, ",")
+
+	for {
+		wrongIndex, ok := isValidPage(strings.Join(values, ","), hashMap)
+		if ok {
+			return strings.Join(values, ",")
+		}
+		values[wrongIndex], values[wrongIndex-1] = values[wrongIndex-1], values[wrongIndex]
+	}
 }
 
 func getMiddleValue(page string) int {
@@ -42,7 +76,7 @@ func getMiddleValue(page string) int {
 	return values[len(values)/2]
 }
 
-func isValidPage(page string, orderMap map[int][]int) bool {
+func isValidPage(page string, orderMap map[int][]int) (int, bool) {
 	pageValues := strings.Split(page, ",")
 	var pages []int
 	for _, str := range pageValues {
@@ -62,12 +96,12 @@ func isValidPage(page string, orderMap map[int][]int) bool {
 			pageIndexes := FindAllIndexes(pages, mustComeLaterValue)
 			for _, i := range pageIndexes {
 				if i < orderIdx {
-					return false
+					return orderIdx, false
 				}
 			}
 		}
 	}
-	return true
+	return -1, true
 }
 
 func processInputs(input []string) ([]string, []string) {
