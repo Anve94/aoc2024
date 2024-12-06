@@ -24,7 +24,7 @@ type Offset struct {
 	row int
 }
 
-type Historian struct {
+type Guard struct {
 	walkedPositions  map[Position]int
 	currentPosition  Position
 	currentDirection string
@@ -43,45 +43,45 @@ func main() {
 func part1(input []string) int {
 	rowStart, colStart, startChar := findStartingPosition(input)
 
-	historian := Historian{
+	guard := Guard{
 		walkedPositions:  make(map[Position]int),
 		currentPosition:  Position{col: colStart, row: rowStart},
 		currentDirection: startChar,
 	}
 
-	historian.walkedPositions[historian.currentPosition] = 1
+	guard.walkedPositions[guard.currentPosition] = 1
 	for {
-		if canMoveInCurrentDirection(input, historian) {
-			move(&historian)
+		if canMoveInCurrentDirection(input, guard) {
+			move(&guard)
 		} else {
-			turn(&historian)
+			turn(&guard)
 		}
 
-		if isExitingMap(input, historian) {
+		if isExitingMap(input, guard) {
 			break
 		}
 	}
 
-	return len(historian.walkedPositions)
+	return len(guard.walkedPositions)
 }
 
-func move(historian *Historian) {
-	row, col := historian.currentPosition.row, historian.currentPosition.col
-	offset := DirectionMap[historian.currentDirection]
+func move(guard *Guard) {
+	row, col := guard.currentPosition.row, guard.currentPosition.col
+	offset := DirectionMap[guard.currentDirection]
 	nextRow, nextCol := row+offset.row, col+offset.col
 
-	historian.currentPosition.col = nextCol
-	historian.currentPosition.row = nextRow
-	historian.walkedPositions[historian.currentPosition] = 1
+	guard.currentPosition.col = nextCol
+	guard.currentPosition.row = nextRow
+	guard.walkedPositions[guard.currentPosition] = 1
 }
 
-func turn(historian *Historian) {
-	historian.currentDirection = getNextDirection(historian.currentDirection)
+func turn(guard *Guard) {
+	guard.currentDirection = getNextDirection(guard.currentDirection)
 }
 
-func isExitingMap(grid []string, historian Historian) bool {
-	row, col := historian.currentPosition.row, historian.currentPosition.col
-	offset := DirectionMap[historian.currentDirection]
+func isExitingMap(grid []string, guard Guard) bool {
+	row, col := guard.currentPosition.row, guard.currentPosition.col
+	offset := DirectionMap[guard.currentDirection]
 	nextCol, nextRow := col+offset.col, row+offset.row
 	if nextCol < 0 || nextCol >= len(grid[0]) || nextRow < 0 || nextRow >= len(grid) {
 		return true
@@ -90,10 +90,10 @@ func isExitingMap(grid []string, historian Historian) bool {
 	return false
 }
 
-func canMoveInCurrentDirection(grid []string, historian Historian) bool {
-	row, col := historian.currentPosition.row, historian.currentPosition.col
+func canMoveInCurrentDirection(grid []string, guard Guard) bool {
+	row, col := guard.currentPosition.row, guard.currentPosition.col
 
-	offset := DirectionMap[historian.currentDirection]
+	offset := DirectionMap[guard.currentDirection]
 	nextCol, nextRow := col+offset.col, row+offset.row
 	if nextCol < 0 || nextCol >= len(grid[0]) || nextRow < 0 || nextRow >= len(grid) || string(grid[nextRow][nextCol]) == "#" {
 		return false
