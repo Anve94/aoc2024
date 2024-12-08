@@ -13,6 +13,8 @@ func main() {
 	fullInput, _ := tfp.ParseLinesFromPathAsString("input.txt")
 	fmt.Println(part1(demoInput))
 	fmt.Println(part1(fullInput))
+	fmt.Println(part2(demoInput))
+	fmt.Println(part2(fullInput))
 }
 
 func part1(input []string) int {
@@ -21,7 +23,7 @@ func part1(input []string) int {
 	testValues, calibrationValues := extractValuesFromInput(input)
 	for i := 0; i < len(testValues); i++ {
 		testValue := testValues[i]
-		if isValid(testValue, calibrationValues[i]) {
+		if isValid(testValue, calibrationValues[i], false) {
 			sum += testValue
 		}
 	}
@@ -29,7 +31,21 @@ func part1(input []string) int {
 	return sum
 }
 
-func isValid(testValue int, calibrationValues []int) bool {
+func part2(input []string) int {
+	sum := 0
+
+	testValues, calibrationValues := extractValuesFromInput(input)
+	for i := 0; i < len(testValues); i++ {
+		testValue := testValues[i]
+		if isValid(testValue, calibrationValues[i], true) {
+			sum += testValue
+		}
+	}
+
+	return sum
+}
+
+func isValid(testValue int, calibrationValues []int, withConcatenation bool) bool {
 	if len(calibrationValues) < 2 {
 		// No need to check since we just test immediately if they are the same
 		return calibrationValues[0] == testValue
@@ -41,6 +57,16 @@ func isValid(testValue int, calibrationValues []int) bool {
 		if idx == len(calibrationValues) {
 			// Exit condition once we've iterated over all calibration values
 			return currentValue == testValue
+		}
+
+		if withConcatenation {
+			currentAsString := strconv.Itoa(currentValue)
+			nextAsString := strconv.Itoa(calibrationValues[idx])
+			newValue, _ := strconv.Atoi(currentAsString + nextAsString)
+
+			if recurse(idx+1, newValue) {
+				return true
+			}
 		}
 
 		if recurse(idx+1, currentValue+calibrationValues[idx]) {
