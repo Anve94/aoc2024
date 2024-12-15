@@ -79,6 +79,7 @@ func getAntinodesFromAntennas(antennas map[string][]Pos, withResonantHarmonics b
 					if withResonantHarmonics {
 						antinodes = append(antinodes, primary)
 					}
+					// Why the fuck does this work
 				}
 			}
 		}
