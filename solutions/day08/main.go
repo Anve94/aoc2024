@@ -10,19 +10,23 @@ type Pos struct {
 	x int
 }
 
+var maxX, maxY int
+
 func main() {
 	tfp := parser.TextFileParser{}
 	demoInput, _ := tfp.ParseLinesFromPathAsString("demo.txt")
 	fullInput, _ := tfp.ParseLinesFromPathAsString("input.txt")
-	fmt.Println(part1(demoInput))
-	fmt.Println(part1(fullInput))
-	//fmt.Println(part2(demoInput))
-	//fmt.Println(part2(fullInput))
+	fmt.Println(solve(demoInput, false))
+	fmt.Println(solve(fullInput, false))
+	fmt.Println(solve(demoInput, true))
+	fmt.Println(solve(fullInput, true))
 }
 
-func part1(input []string) int {
+func solve(input []string, withResonantHarmonics bool) int {
+	maxX, maxY = len(input[0])-1, len(input)-1
+
 	antennas := getAntennasFromInput(input)
-	antinodes := getAntinodesFromAntennas(antennas)
+	antinodes := getAntinodesFromAntennas(antennas, withResonantHarmonics)
 	var uniqueAntinodes []Pos
 
 	// Remove duplicates
@@ -39,8 +43,6 @@ func part1(input []string) int {
 		}
 	}
 
-	maxX, maxY := len(input[0])-1, len(input)-1
-
 	count := 0
 	for _, dir := range uniqueAntinodes {
 		if dir.x >= 0 && dir.x <= maxX && dir.y >= 0 && dir.y <= maxY {
@@ -51,14 +53,32 @@ func part1(input []string) int {
 	return count
 }
 
-func getAntinodesFromAntennas(antennas map[string][]Pos) []Pos {
+func getAntinodesFromAntennas(antennas map[string][]Pos, withResonantHarmonics bool) []Pos {
 	var antinodes []Pos
 	for _, positions := range antennas {
-		for leftIdx, leftPos := range positions {
-			for rightIdx, rightPos := range positions {
+		for leftIdx, primary := range positions {
+			for rightIdx, other := range positions {
 				if leftIdx != rightIdx {
-					antinode := getAntinodeLocation(leftPos, rightPos)
+					antinode := getAntinodeLocation(primary, other)
 					antinodes = append(antinodes, antinode)
+					left := antinode
+					right := primary
+
+					for {
+						if !withResonantHarmonics || antinode.x > maxX || antinode.x < 0 || antinode.y > maxY || antinode.y < 0 {
+							break
+						}
+						// Keep running deltas until exit condition
+						antinode = getAntinodeLocation(left, right)
+						antinodes = append(antinodes, antinode)
+						right = left
+						left = antinode
+					}
+
+					// Include this antenna, maybe?
+					if withResonantHarmonics {
+						antinodes = append(antinodes, primary)
+					}
 				}
 			}
 		}
